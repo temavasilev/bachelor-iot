@@ -1,4 +1,8 @@
 # Implementing the IoT Agent MQTT Gateway
+# TODO
+#  1. Function needed: match field devices with entity
+#  2. Function needed: convert field MQTT payload to FIWARE compatible payload (MQTT/HTTP)
+#  3.
 
 import json
 import time
@@ -54,6 +58,7 @@ class MqttGateway:
             device (Lorawan): The device to add
         """
         print(f"Adding device {device.name} to the gateway")
+        # TODO here the name should not be device name, but real attribute name, like temperature
         self.gateway_device.add_attribute(
             DeviceAttribute(
                 object_id=str(device.id),
@@ -63,6 +68,7 @@ class MqttGateway:
         self.database.add_device(
             # I presume here that the attribute name to watch matches the name 
             # in the payload and that it is not nested
+            # TODO we can first take the full json path as input
             device_id=device.id, jsonpath=f"$..{device.attribute}", topic=device.topic
         )
         self.iota_client.update_device(device=self.gateway_device)
@@ -103,6 +109,8 @@ class MqttGateway:
 if __name__ == "__main__":
     sensor = Lorawan("lorawan", "test/gateway", "temperature")
     gateway = MqttGateway()
+    # TODO add_device should be renamed as add_data_point
+    # TODO it should take input like ("test/gateway", "jsonPath")
     gateway.add_device(sensor)
     print(gateway.gateway_device.attributes)
     print(gateway.database.get_all_devices())

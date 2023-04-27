@@ -9,7 +9,7 @@ from filip.clients.mqtt import IoTAMQTTClient
 from filip.models.base import FiwareHeader
 from filip.models.ngsi_v2.iot import Device, DeviceAttribute, ServiceGroup
 from filip.utils.cleanup import clear_context_broker, clear_iot_agent
-
+from typing import Union
 from gateway.gateway import MqttGateway
 
 
@@ -22,7 +22,7 @@ temperature_sensor = Device(device_id='device:001',
                                                         object_id='t',
                                                         type='Number')])
 
-def initial_setup() -> IoTAClient | ContextBrokerClient:
+def initial_setup():
     fiware_header = FiwareHeader(service=config['gateway_setup']['fiware_service'],
                                  service_path=config['gateway_setup']['fiware_servicepath'])
     clear_iot_agent(f"http://{config['connection_settings']['server_ip']}:{config['connection_settings']['iota_port']}", fiware_header=fiware_header)
@@ -46,5 +46,5 @@ def main():
     print(mqtt_gateway.device_topics)
 
 if __name__ == '__main__':
-    config = json.load(open('config.json'))
+    config = json.load(open('gateway/config.json'))
     main()

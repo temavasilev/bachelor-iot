@@ -24,7 +24,7 @@ class PostgresDB:
             self.cursor.execute(
                 """CREATE TABLE IF NOT EXISTS devices (
                                 id UUID PRIMARY KEY,
-                                object_id VARCHAR(255) NOT NULL,
+                                device_id VARCHAR(255) NOT NULL,
                                 jsonpath VARCHAR(255) NOT NULL,
                                 topic VARCHAR(255) NOT NULL
 )

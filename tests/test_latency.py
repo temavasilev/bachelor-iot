@@ -25,15 +25,20 @@ client.on_message = on_message
 client.connect(mqtt_broker_address, 1883, 60)
 client.loop_start()
 
-num_messages = 10
-num_iterations = 10
+num_messages = 100
+# num_iterations = 10
+mps_max = 500  # 1000 message per second
+# num_iterations = mps_max / 10
 
-for freq in range(0, num_iterations * 10, 10):
-    for _ in range(num_messages):
-        current_msg_rate = freq + 1
+# TODO need to ensure Message per second. Now it is not right
+for freq in range(0, int(mps_max), 10):
+    current_msg_rate = freq + 1
+    for _ in range(current_msg_rate):
         sleep_interval = 1 / current_msg_rate
         time.sleep(sleep_interval)
+        # TODO should use multi thread, after every time_interval start a new thread
         client.publish("test/latency", time.time())
+    # TODO wait until this frequncy finish
 
 client.loop_stop()
 
